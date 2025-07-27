@@ -1,130 +1,90 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+let horizontalIndex = 0;
+let verticalPositions = [0, 0];
+const hContainer = document.getElementById("hContainer");
+const vLeft = document.getElementById("vLeft");
+const vRight = document.getElementById("vRight");
+
+function updateTransforms() {
+  hContainer.style.transform = `translateX(-${horizontalIndex * 100}vw)`;
+  vLeft.style.transform = `translateY(-${verticalPositions[0] * 100}vh)`;
+  vRight.style.transform = `translateY(-${verticalPositions[1] * 100}vh)`;
 }
 
-html, body {
-  width: 100%;
-  height: 100%;
-  font-family: 'Segoe UI', sans-serif;
-  overflow: hidden;
-}
+let startX = 0, startY = 0;
+document.addEventListener("touchstart", (e) => {
+  startX = e.touches[0].clientX;
+  startY = e.touches[0].clientY;
+});
 
-.horizontal-container {
-  display: flex;
-  width: 200vw;
-  height: 100vh;
-  transition: transform 0.6s ease;
-}
+document.addEventListener("touchend", (e) => {
+  let deltaX = e.changedTouches[0].clientX - startX;
+  let deltaY = e.changedTouches[0].clientY - startY;
+  const atEffect1 = horizontalIndex === 0 && verticalPositions[0] === 0;
+  const atEffect2 = horizontalIndex === 1 && verticalPositions[1] === 0;
 
-.vertical-wrapper {
-  width: 100vw;
-  height: 200vh;
-  display: flex;
-  flex-direction: column;
-  transition: transform 0.6s ease;
-}
-
-.section {
-  width: 100%;
-  height: 100vh;
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-}
-
-.effect2 {
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  width: 100vw;
-  height: 100vh;
-  flex-shrink: 0;
-  background-image: url("assets/images/desktop-bg.jpg"); /* ảnh cho máy tính */
-}
-
-/* Nếu là điện thoại (màn hình nhỏ hơn 768px) */
-@media screen and (max-width: 768px) {
-  .effect2 {
-    background-image: url("assets/images/mobile-bg.jpg"); /* ảnh cho điện thoại */
+  if (Math.abs(deltaX) > Math.abs(deltaY)) {
+    if (deltaX < -50 && atEffect1) horizontalIndex = 1;
+    else if (deltaX > 50 && atEffect2) horizontalIndex = 0;
+  } else {
+    if (horizontalIndex === 0 && deltaY < -50 && verticalPositions[0] === 0) verticalPositions[0] = 1;
+    if (horizontalIndex === 1 && deltaY < -50 && verticalPositions[1] === 0) verticalPositions[1] = 1;
   }
+  updateTransforms();
+});
+
+document.querySelectorAll(".arrow").forEach((arrow, idx) => {
+  arrow.addEventListener("click", () => {
+    if (idx === 0 && verticalPositions[0] === 0) verticalPositions[0] = 1;
+    if (idx === 1 && verticalPositions[1] === 0) verticalPositions[1] = 1;
+    updateTransforms();
+  });
+});
+
+function goToEffectFromBio(bioNum) {
+  if (bioNum === 1) {
+    horizontalIndex = 1;
+    verticalPositions[1] = 0;
+  } else {
+    horizontalIndex = 0;
+    verticalPositions[0] = 0;
+  }
+  updateTransforms();
 }
 
+const quotes1 = [
+  "Có người rủ anh đi ăn tối, nhưng anh từ chối vì thực đơn không có em.",
+  "Thanh xuân như một tách trà, sống không cà khịa thì quá uổng phí.",
+  "Em là mặt trời, vì em xuất hiện là anh thấy chói mắt.",
+  "Anh thích em hơn tất cả các dòng code anh từng viết."
+];
 
-.arrow {
-  position: absolute;
-  bottom: 30px;
-  left: 50%;
-  transform: translateX(-50%);
-  animation: bounce 1.5s infinite;
-  cursor: pointer;
-}
+const quotes2 = [
+  "Mỗi lần gặp em, anh thấy như trình duyệt mới mở tab.",
+  "Nếu em là bug thì anh nguyện debug cả đời.",
+  "Trái tim anh giống như vòng lặp vô tận, không thể thoát khỏi em.",
+  "Chạy task nào cũng được, miễn là được chạy bên em."
+];
 
-.arrow svg {
-  width: 40px;
-  height: 40px;
-  stroke: white;
-  stroke-width: 2;
-  fill: none;
-}
+let q1 = 0, q2 = 0;
+setInterval(() => {
+  q1 = (q1 + 1) % quotes1.length;
+  q2 = (q2 + 1) % quotes2.length;
+  document.getElementById("quote1").innerText = quotes1[q1];
+  document.getElementById("quote2").innerText = quotes2[q2];
+}, 5000);
 
-@keyframes bounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(10px); }
-}
-
-.avatar {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 3px solid white;
-  margin-bottom: 10px;
-}
-
-.name {
-  font-size: 24px;
-  font-weight: bold;
-}
-
-.quote {
-  font-size: 14px;
-  max-width: 90%;
-  margin-top: 5px;
-  text-align: center;
-}
-
-.bio1, .bio2 {
-  padding: 0;
-}
-
-iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
-}
-
-.home-header {
-  position: absolute;
-  top: 15px;
-  left: 15px;
-  font-weight: bold;
-  font-size: 18px;
-  cursor: pointer;
-  background: linear-gradient(270deg, #ff70a6, #d66efd, #70d6ff);
-  background-size: 600% 600%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: gradientShift 6s ease infinite;
-  z-index: 10;
-}
-
-@keyframes gradientShift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
+// ⬆️ Thêm chạm vào bất kỳ đâu trong hiệu ứng để tự động chuyển sang bio
+["click", "touchstart"].forEach(evt => {
+  document.querySelector(".effect1").addEventListener(evt, () => {
+    if (verticalPositions[0] === 0) {
+      verticalPositions[0] = 1;
+      updateTransforms();
+    }
+  });
+  document.querySelector(".effect2").addEventListener(evt, () => {
+    if (verticalPositions[1] === 0) {
+      verticalPositions[1] = 1;
+      updateTransforms();
+    }
+  });
+});
