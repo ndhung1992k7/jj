@@ -12,12 +12,8 @@
   <!-- Trang bên trái (Hiệu ứng 1 + Bio 1) -->
   <div class="vertical-wrapper" id="vLeft">
     <!-- Hiệu ứng 1 -->
-    <div class="section effect1">
-      <!-- Video nền -->
-      <video autoplay muted loop playsinline class="bg-video">
-        <source src="baclground/mobile1.mp4" type="video/mp4" />
-      </video>
-
+    <div class="section effect1" onclick="goToBio(1)">
+      <video autoplay muted loop playsinline class="bg-video" id="bgVideo1"></video>
       <img src="avatar.jpg" class="avatar">
       <div class="name">ThanhDieu</div>
       <div class="quote" id="quote1">"Câu nói hay đầu tiên..."</div>
@@ -27,7 +23,6 @@
         </svg>
       </div>
     </div>
-
     <!-- Bio 1 -->
     <div class="section bio1">
       <div class="home-header" onclick="goToEffectFromBio(1)">ThanhDieu Home</div>
@@ -38,14 +33,10 @@
   <!-- Trang bên phải (Hiệu ứng 2 + Bio 2) -->
   <div class="vertical-wrapper" id="vRight">
     <!-- Hiệu ứng 2 -->
-    <div class="section effect2">
-      <!-- Video nền -->
-      <video autoplay muted loop playsinline class="bg-video">
-        <source src="assets/videos/bg2.mp4" type="video/mp4" />
-      </video>
-
+    <div class="section effect2" onclick="goToBio(2)">
+      <video autoplay muted loop playsinline class="bg-video" id="bgVideo2"></video>
       <img src="avatar.jpg" class="avatar">
-      <div class="name">ThanhDieu</div>
+      <div class="name">ThanhDiffffffeu</div>
       <div class="quote" id="quote2">"Câu nói hay thứ hai..."</div>
       <div class="arrow">
         <svg viewBox="0 0 24 24">
@@ -53,7 +44,6 @@
         </svg>
       </div>
     </div>
-
     <!-- Bio 2 -->
     <div class="section bio2">
       <div class="home-header" onclick="goToEffectFromBio(2)">ThanhDieu Home</div>
@@ -63,5 +53,12 @@
 </div>
 
 <script src="script.js"></script>
+<script>
+  // Xác định thiết bị và đặt video phù hợp
+  const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+
+  document.getElementById('bgVideo1').src = isMobile ? "mobile1.mp4" : "pc1.mp4";
+  document.getElementById('bgVideo2').src = isMobile ? "mobile2.mp4" : "pc2.mp4";
+</script>
 </body>
 </html>
