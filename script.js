@@ -96,3 +96,23 @@ window.addEventListener("load", () => {
     setTimeout(() => loader.remove(), 500);
   }, 4000); // khớp với thời gian animation
 });
+window.addEventListener("load", () => {
+  const videos = [document.getElementById('bgVideo1'), document.getElementById('bgVideo2')];
+  let loadedCount = 0;
+
+  videos.forEach(video => {
+    video.onloadeddata = () => {
+      loadedCount++;
+      if (loadedCount === videos.length) {
+        document.getElementById("loadingScreen").style.display = "none";
+        document.getElementById("hContainer").style.display = "flex"; // hoặc block tùy CSS
+      }
+    };
+  });
+
+  // Trong trường hợp video không load (lỗi mạng), fallback sau 3s
+  setTimeout(() => {
+    document.getElementById("loadingScreen").style.display = "none";
+    document.getElementById("hContainer").style.display = "flex";
+  }, 3000);
+});
